@@ -12,8 +12,13 @@ import {
   AlertCircle, 
   Clock,
   Globe,
-  Lock
+  Lock,
+  Mail,
+  Phone,
+  Link,
+  CreditCard
 } from 'lucide-react';
+import { SiGoogle, SiFacebook } from 'react-icons/si';
 
 interface MockAuthUser {
   id: string;
@@ -38,13 +43,15 @@ export function AuthDemo() {
   const [isLoading, setIsLoading] = useState(false);
 
   const providers = [
+    // Norwegian Providers
     {
       id: 'idporten',
       name: 'ID-porten',
       description: 'Norwegian national identity provider',
       icon: <Globe className="w-5 h-5" />,
       color: 'bg-red-600',
-      textColor: 'text-red-600'
+      textColor: 'text-red-600',
+      category: 'norwegian'
     },
     {
       id: 'bankid',
@@ -52,7 +59,8 @@ export function AuthDemo() {
       description: 'Norwegian banking identity system',
       icon: <Shield className="w-5 h-5" />,
       color: 'bg-blue-600',
-      textColor: 'text-blue-600'
+      textColor: 'text-blue-600',
+      category: 'norwegian'
     },
     {
       id: 'feide',
@@ -60,7 +68,63 @@ export function AuthDemo() {
       description: 'Educational sector authentication',
       icon: <User className="w-5 h-5" />,
       color: 'bg-green-600',
-      textColor: 'text-green-600'
+      textColor: 'text-green-600',
+      category: 'norwegian'
+    },
+    {
+      id: 'vipps',
+      name: 'Vipps',
+      description: 'Norwegian mobile payment authentication',
+      icon: <CreditCard className="w-5 h-5" />,
+      color: 'bg-orange-500',
+      textColor: 'text-orange-500',
+      category: 'norwegian'
+    },
+    // Global Providers
+    {
+      id: 'google',
+      name: 'Google',
+      description: 'Google OAuth authentication',
+      icon: <SiGoogle className="w-5 h-5" />,
+      color: 'bg-red-500',
+      textColor: 'text-red-500',
+      category: 'global'
+    },
+    {
+      id: 'facebook',
+      name: 'Facebook',
+      description: 'Facebook social authentication',
+      icon: <SiFacebook className="w-5 h-5" />,
+      color: 'bg-blue-500',
+      textColor: 'text-blue-500',
+      category: 'global'
+    },
+    {
+      id: 'email',
+      name: 'Email/Password',
+      description: 'Traditional email and password login',
+      icon: <Mail className="w-5 h-5" />,
+      color: 'bg-gray-600',
+      textColor: 'text-gray-600',
+      category: 'passwordless'
+    },
+    {
+      id: 'magic-link',
+      name: 'Magic Link',
+      description: 'Passwordless email authentication',
+      icon: <Link className="w-5 h-5" />,
+      color: 'bg-purple-600',
+      textColor: 'text-purple-600',
+      category: 'passwordless'
+    },
+    {
+      id: 'sms-otp',
+      name: 'SMS OTP',
+      description: 'SMS-based one-time password',
+      icon: <Phone className="w-5 h-5" />,
+      color: 'bg-indigo-600',
+      textColor: 'text-indigo-600',
+      category: 'passwordless'
     },
     {
       id: 'dev',
@@ -68,7 +132,8 @@ export function AuthDemo() {
       description: 'Mock provider for testing',
       icon: <Key className="w-5 h-5" />,
       color: 'bg-purple-600',
-      textColor: 'text-purple-600'
+      textColor: 'text-purple-600',
+      category: 'development'
     }
   ];
 
@@ -122,6 +187,96 @@ export function AuthDemo() {
           id: 'uio',
           type: 'private' as const,
           name: 'University of Oslo'
+        },
+        authenticated: true,
+        loginTime: new Date()
+      },
+      vipps: {
+        id: 'vipps-47123456789',
+        name: 'Lars Vippsen',
+        email: 'lars@vipps.no',
+        provider: 'Vipps',
+        roles: ['user'],
+        permissions: ['profile:read', 'payments:use'],
+        tenant: {
+          id: 'vipps-users',
+          type: 'private' as const,
+          name: 'Vipps Users'
+        },
+        authenticated: true,
+        loginTime: new Date()
+      },
+      google: {
+        id: 'google-112233445566778899',
+        name: 'Anna Schmidt',
+        email: 'anna.schmidt@gmail.com',
+        provider: 'Google',
+        roles: ['user'],
+        permissions: ['profile:read', 'services:use'],
+        tenant: {
+          id: 'global',
+          type: 'private' as const,
+          name: 'Global Users'
+        },
+        authenticated: true,
+        loginTime: new Date()
+      },
+      facebook: {
+        id: 'facebook-987654321012345',
+        name: 'Mike Johnson',
+        email: 'mike.johnson@facebook.com',
+        provider: 'Facebook',
+        roles: ['user'],
+        permissions: ['profile:read', 'social:connect'],
+        tenant: {
+          id: 'global',
+          type: 'private' as const,
+          name: 'Global Users'
+        },
+        authenticated: true,
+        loginTime: new Date()
+      },
+      email: {
+        id: 'email-user-456',
+        name: 'Sarah Wilson',
+        email: 'sarah.wilson@example.com',
+        provider: 'Email/Password',
+        roles: ['user'],
+        permissions: ['profile:read', 'services:use'],
+        tenant: {
+          id: 'global',
+          type: 'private' as const,
+          name: 'Global Users'
+        },
+        authenticated: true,
+        loginTime: new Date()
+      },
+      'magic-link': {
+        id: 'magic-789',
+        name: 'John Doe',
+        email: 'john.doe@company.com',
+        provider: 'Magic Link',
+        roles: ['user'],
+        permissions: ['profile:read', 'services:use'],
+        tenant: {
+          id: 'global',
+          type: 'private' as const,
+          name: 'Global Users'
+        },
+        authenticated: true,
+        loginTime: new Date()
+      },
+      'sms-otp': {
+        id: 'sms-user-321',
+        name: 'Phone User',
+        email: '+4747123456@sms.local',
+        provider: 'SMS OTP',
+        roles: ['user'],
+        permissions: ['profile:read', 'services:use'],
+        tenant: {
+          id: 'global',
+          type: 'private' as const,
+          name: 'Global Users'
         },
         authenticated: true,
         loginTime: new Date()
@@ -224,8 +379,134 @@ app.get('/auth/callback/:provider', async (req, res) => {
               {!mockUser ? (
                 <div>
                   <h3 className="text-lg font-semibold mb-4">Choose Authentication Provider</h3>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {providers.map((provider) => (
+                  <Tabs defaultValue="norwegian" className="w-full">
+                    <TabsList className="grid grid-cols-4 w-full mb-6">
+                      <TabsTrigger value="norwegian">Norwegian</TabsTrigger>
+                      <TabsTrigger value="global">Global</TabsTrigger>
+                      <TabsTrigger value="passwordless">Passwordless</TabsTrigger>
+                      <TabsTrigger value="development">Development</TabsTrigger>
+                    </TabsList>
+
+                    <TabsContent value="norwegian">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {providers.filter(p => p.category === 'norwegian').map((provider) => (
+                          <Card 
+                            key={provider.id}
+                            className={`cursor-pointer transition-all hover:shadow-md ${
+                              isLoading && selectedProvider === provider.id 
+                                ? 'ring-2 ring-blue-500' 
+                                : ''
+                            }`}
+                            onClick={() => mockLogin(provider.id)}
+                          >
+                            <CardContent className="p-6">
+                              <div className="flex items-center gap-3 mb-3">
+                                <div className={`w-10 h-10 ${provider.color} rounded-lg flex items-center justify-center text-white`}>
+                                  {provider.icon}
+                                </div>
+                                <div>
+                                  <h4 className="font-semibold">{provider.name}</h4>
+                                  <p className="text-sm text-slate-600">{provider.description}</p>
+                                </div>
+                              </div>
+                              
+                              {isLoading && selectedProvider === provider.id ? (
+                                <div className="flex items-center gap-2 text-blue-600">
+                                  <Clock className="w-4 h-4 animate-spin" />
+                                  <span className="text-sm">Authenticating...</span>
+                                </div>
+                              ) : (
+                                <Button variant="outline" size="sm" className="w-full">
+                                  Login with {provider.name}
+                                </Button>
+                              )}
+                            </CardContent>
+                          </Card>
+                        ))}
+                      </div>
+                    </TabsContent>
+
+                    <TabsContent value="global">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {providers.filter(p => p.category === 'global').map((provider) => (
+                          <Card 
+                            key={provider.id}
+                            className={`cursor-pointer transition-all hover:shadow-md ${
+                              isLoading && selectedProvider === provider.id 
+                                ? 'ring-2 ring-blue-500' 
+                                : ''
+                            }`}
+                            onClick={() => mockLogin(provider.id)}
+                          >
+                            <CardContent className="p-6">
+                              <div className="flex items-center gap-3 mb-3">
+                                <div className={`w-10 h-10 ${provider.color} rounded-lg flex items-center justify-center text-white`}>
+                                  {provider.icon}
+                                </div>
+                                <div>
+                                  <h4 className="font-semibold">{provider.name}</h4>
+                                  <p className="text-sm text-slate-600">{provider.description}</p>
+                                </div>
+                              </div>
+                              
+                              {isLoading && selectedProvider === provider.id ? (
+                                <div className="flex items-center gap-2 text-blue-600">
+                                  <Clock className="w-4 h-4 animate-spin" />
+                                  <span className="text-sm">Authenticating...</span>
+                                </div>
+                              ) : (
+                                <Button variant="outline" size="sm" className="w-full">
+                                  Login with {provider.name}
+                                </Button>
+                              )}
+                            </CardContent>
+                          </Card>
+                        ))}
+                      </div>
+                    </TabsContent>
+
+                    <TabsContent value="passwordless">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {providers.filter(p => p.category === 'passwordless').map((provider) => (
+                          <Card 
+                            key={provider.id}
+                            className={`cursor-pointer transition-all hover:shadow-md ${
+                              isLoading && selectedProvider === provider.id 
+                                ? 'ring-2 ring-blue-500' 
+                                : ''
+                            }`}
+                            onClick={() => mockLogin(provider.id)}
+                          >
+                            <CardContent className="p-6">
+                              <div className="flex items-center gap-3 mb-3">
+                                <div className={`w-10 h-10 ${provider.color} rounded-lg flex items-center justify-center text-white`}>
+                                  {provider.icon}
+                                </div>
+                                <div>
+                                  <h4 className="font-semibold">{provider.name}</h4>
+                                  <p className="text-sm text-slate-600">{provider.description}</p>
+                                </div>
+                              </div>
+                              
+                              {isLoading && selectedProvider === provider.id ? (
+                                <div className="flex items-center gap-2 text-blue-600">
+                                  <Clock className="w-4 h-4 animate-spin" />
+                                  <span className="text-sm">Authenticating...</span>
+                                </div>
+                              ) : (
+                                <Button variant="outline" size="sm" className="w-full">
+                                  Login with {provider.name}
+                                </Button>
+                              )}
+                            </CardContent>
+                          </Card>
+                        ))}
+                      </div>
+                    </TabsContent>
+
+                    <TabsContent value="development">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {providers.filter(p => p.category === 'development').map((provider) => (
                       <Card 
                         key={provider.id}
                         className={`cursor-pointer transition-all hover:shadow-md ${
@@ -258,8 +539,10 @@ app.get('/auth/callback/:provider', async (req, res) => {
                           )}
                         </CardContent>
                       </Card>
-                    ))}
-                  </div>
+                          ))}
+                      </div>
+                    </TabsContent>
+                  </Tabs>
                 </div>
               ) : (
                 <div className="space-y-6">

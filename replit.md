@@ -35,11 +35,24 @@ This is a Norwegian-compliant authentication system built as part of the Xala En
 - **ComplianceLogger**: GDPR-compliant audit logging with encryption support
 
 ### Authentication Providers
+
+#### Norwegian Compliance Providers
 - **IDPortenProvider**: Norwegian national identity provider integration
-- **BankIDProvider**: Norwegian banking identity system
+- **BankIDProvider**: Norwegian banking identity system with mobile support
 - **FeideProvider**: Norwegian educational sector authentication
 - **MinIDProvider**: Simplified Norwegian identity verification
+- **VippsAuthProvider**: Norwegian mobile payment authentication system
 - **DevAuthProvider**: Development and testing authentication with mock users
+
+#### Global OAuth Providers
+- **GoogleOAuthProvider**: Google OAuth 2.0 authentication with profile access
+- **FacebookOAuthProvider**: Facebook social authentication integration
+- **SupabaseAuthProvider**: Supabase authentication service integration
+
+#### Passwordless Authentication
+- **EmailAuthProvider**: Traditional email/password with registration and reset flows
+- **MagicLinkAuthProvider**: Passwordless email-based authentication with JWT tokens
+- **SMSOTPAuthProvider**: SMS-based one-time password verification system
 
 ### Database Schema
 - **Users Table**: Basic user information with username/password authentication
@@ -119,7 +132,14 @@ This is a Norwegian-compliant authentication system built as part of the Xala En
 
 ```
 Changelog:
-- July 08, 2025. Initial setup
+- July 08, 2025: Initial setup with core Norwegian providers
+- July 08, 2025: Added 7 new authentication providers:
+  * Global OAuth: Google, Facebook, Supabase
+  * Passwordless: Email/Password, Magic Links, SMS OTP
+  * Norwegian: Vipps mobile payment authentication
+- July 08, 2025: Updated landing page with categorized provider demo
+- July 08, 2025: Comprehensive test suite for all 11 authentication providers
+- July 08, 2025: Enhanced UI with provider categories and interactive demos
 ```
 
 ## User Preferences

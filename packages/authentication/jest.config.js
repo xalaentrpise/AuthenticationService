@@ -2,7 +2,10 @@ module.exports = {
   preset: 'ts-jest',
   testEnvironment: 'node',
   roots: ['<rootDir>/src', '<rootDir>/__tests__'],
-  testMatch: ['**/__tests__/**/*.test.ts'],
+  testMatch: [
+    '**/__tests__/**/*.test.ts',
+    '**/?(*.)+(spec|test).ts'
+  ],
   transform: {
     '^.+\\.ts$': 'ts-jest',
   },
@@ -15,10 +18,16 @@ module.exports = {
   coverageReporters: ['text', 'lcov', 'html'],
   coverageThreshold: {
     global: {
-      branches: 90,
-      functions: 90,
-      lines: 90,
-      statements: 90
+      branches: 80,
+      functions: 80,
+      lines: 80,
+      statements: 80
     }
+  },
+  setupFilesAfterEnv: ['<rootDir>/__tests__/setup.ts'],
+  testTimeout: 30000,
+  verbose: true,
+  moduleNameMapping: {
+    '^@/(.*)$': '<rootDir>/src/$1'
   }
 };

@@ -16,7 +16,8 @@ import {
   Award,
   Github,
   ExternalLink,
-  Download
+  Download,
+  Globe
 } from 'lucide-react';
 
 export default function HomePage() {
@@ -85,15 +86,24 @@ app.get('/admin/users',
 
   const multiProviderCode = `import { 
   AuthService, 
+  // Norwegian Providers
   IDPortenProvider, 
   BankIDProvider, 
   FeideProvider,
+  VippsAuthProvider,
+  // Global Providers
+  GoogleOAuthProvider,
+  FacebookOAuthProvider,
+  EmailAuthProvider,
+  MagicLinkAuthProvider,
+  SMSOTPAuthProvider,
+  SupabaseAuthProvider,
   DevAuthProvider 
 } from '@xala-technologies/authentication';
 
 const authService = new AuthService({
   providers: [
-    // ID-porten for public sector
+    // Norwegian Compliance Providers
     new IDPortenProvider({
       clientId: process.env.IDPORTEN_CLIENT_ID,
       clientSecret: process.env.IDPORTEN_CLIENT_SECRET,
@@ -101,18 +111,47 @@ const authService = new AuthService({
       scopes: ['openid', 'profile']
     }),
     
-    // BankID for strong authentication
     new BankIDProvider({
       clientId: process.env.BANKID_CLIENT_ID,
       clientSecret: process.env.BANKID_CLIENT_SECRET,
+      environment: 'production',
+      merchantName: 'Your Organization'
+    }),
+    
+    new VippsAuthProvider({
+      clientId: process.env.VIPPS_CLIENT_ID,
+      clientSecret: process.env.VIPPS_CLIENT_SECRET,
+      subscriptionKey: process.env.VIPPS_SUBSCRIPTION_KEY,
+      redirectUri: 'https://your-app.no/auth/callback',
       environment: 'production'
     }),
     
-    // Feide for educational institutions
-    new FeideProvider({
-      clientId: process.env.FEIDE_CLIENT_ID,
-      clientSecret: process.env.FEIDE_CLIENT_SECRET,
-      scope: 'userinfo-name userinfo-email'
+    // Global OAuth Providers
+    new GoogleOAuthProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      redirectUri: 'https://your-app.com/auth/callback'
+    }),
+    
+    new FacebookOAuthProvider({
+      appId: process.env.FACEBOOK_APP_ID,
+      appSecret: process.env.FACEBOOK_APP_SECRET,
+      redirectUri: 'https://your-app.com/auth/callback'
+    }),
+    
+    // Passwordless Authentication
+    new MagicLinkAuthProvider({
+      jwtSecret: process.env.JWT_SECRET,
+      userStore: userStoreInstance,
+      emailService: emailServiceInstance,
+      baseUrl: 'https://your-app.com'
+    }),
+    
+    new SMSOTPAuthProvider({
+      otpLength: 6,
+      userStore: smsUserStoreInstance,
+      smsService: smsServiceInstance,
+      otpStore: otpStoreInstance
     }),
     
     // Development provider for testing
@@ -170,8 +209,8 @@ const authService = new AuthService({
               Norwegian-Compliant Authentication
             </h1>
             <p className="text-xl text-slate-300 mb-8 leading-relaxed">
-              Enterprise-grade authentication package with ID-porten, BankID, Feide integration. 
-              Built for Norwegian public sector compliance, GDPR adherence, and seamless Supabase integration.
+              Complete authentication solution with 10+ providers including Norwegian compliance (ID-porten, BankID, Feide, Vipps), 
+              global OAuth (Google, Facebook), passwordless authentication (Magic Links, SMS OTP), and enterprise integrations.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
               <div className="bg-slate-800 border border-slate-700 rounded-lg px-6 py-3 font-mono text-sm">
@@ -194,7 +233,7 @@ const authService = new AuthService({
               <div className="text-sm text-slate-600">Test Coverage</div>
             </div>
             <div className="text-center">
-              <div className="text-3xl font-bold text-slate-900 mb-2">5</div>
+              <div className="text-3xl font-bold text-slate-900 mb-2">10+</div>
               <div className="text-sm text-slate-600">Auth Providers</div>
             </div>
             <div className="text-center">
@@ -215,7 +254,7 @@ const authService = new AuthService({
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold text-slate-900 mb-4">Comprehensive Authentication Solution</h2>
             <p className="text-xl text-slate-600 max-w-3xl mx-auto">
-              Everything you need for secure, compliant authentication in Norwegian enterprise applications.
+              Complete authentication solution with Norwegian compliance providers, global OAuth integration, and passwordless authentication options.
             </p>
           </div>
 
