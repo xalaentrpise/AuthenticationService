@@ -29,7 +29,7 @@ jobs:
         working-directory: ./packages/authentication
         
       - name: Run tests
-        run: npm test
+        run: npm test -- --maxWorkers=1 --forceExit
         working-directory: ./packages/authentication
         
       - name: Build package

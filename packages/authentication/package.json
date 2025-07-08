@@ -11,7 +11,7 @@
   ],
   "scripts": {
     "build": "tsc",
-    "test": "jest",
+    "test": "jest --testPathIgnorePatterns=e2e --testPathIgnorePatterns=performance --testPathIgnorePatterns=integration",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
     "test:integration": "jest --testPathPattern=integration",

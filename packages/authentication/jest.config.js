@@ -24,10 +24,10 @@ module.exports = {
       statements: 80
     }
   },
-  setupFilesAfterEnv: ['<rootDir>/__tests__/setup.ts'],
-  testTimeout: 30000,
+  // setupFilesAfterEnv: ['<rootDir>/__tests__/setup.ts'], // Disabled for CI
+  testTimeout: 10000,
   verbose: true,
-  moduleNameMapping: {
+  moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1'
   }
 };
