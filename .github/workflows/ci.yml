@@ -93,12 +93,12 @@ jobs:
           args: --severity-threshold=medium --file=${{ env.PACKAGE_PATH }}/package.json
           
       - name: Run CodeQL Analysis
-        uses: github/codeql-action/init@v2
+        uses: github/codeql-action/init@v3
         with:
           languages: javascript
           
       - name: Perform CodeQL Analysis
-        uses: github/codeql-action/analyze@v2
+        uses: github/codeql-action/analyze@v3
         
       - name: Run secret scanning
         run: |
