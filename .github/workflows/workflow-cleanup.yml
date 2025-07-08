@@ -1,0 +1,31 @@
+name: Workflow Cleanup
+
+on:
+  schedule:
+    - cron: '0 1 * * *' # Daily at 1 AM UTC
+  workflow_dispatch:
+
+jobs:
+  cleanup:
+    name: Clean up old workflow runs
+    runs-on: ubuntu-latest
+    permissions:
+      actions: write
+      
+    steps:
+      - name: Cleanup old workflow runs
+        uses: Mattraks/delete-workflow-runs@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          repository: ${{ github.repository }}
+          retain_days: 7
+          keep_minimum_runs: 5
+          
+      - name: Clean up cancelled runs
+        run: |
+          # Clean up queued and cancelled runs
+          gh api repos/${{ github.repository }}/actions/runs \
+            --jq '.workflow_runs[] | select(.status == "queued" or .status == "cancelled") | .id' \
+            | xargs -I {} gh api repos/${{ github.repository }}/actions/runs/{} -X DELETE
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

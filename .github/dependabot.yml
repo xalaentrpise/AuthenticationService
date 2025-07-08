@@ -3,14 +3,10 @@ updates:
   - package-ecosystem: "npm"
     directory: "/"
     schedule:
-      interval: "weekly"
+      interval: "monthly"
       day: "monday"
       time: "09:00"
-    open-pull-requests-limit: 10
-    reviewers:
-      - "@xala-technologies/security-team"
-    assignees:
-      - "@xala-technologies/maintainers"
+    open-pull-requests-limit: 3
     commit-message:
       prefix: "chore"
       include: "scope"
@@ -20,18 +16,24 @@ updates:
     ignore:
       - dependency-name: "*"
         update-types: ["version-update:semver-major"]
+      # Group updates to reduce PR count
+    groups:
+      radix-ui:
+        patterns:
+          - "@radix-ui/*"
+      dev-dependencies:
+        patterns:
+          - "@types/*"
+          - "typescript"
+          - "eslint*"
         
   - package-ecosystem: "npm"
     directory: "/packages/authentication"
     schedule:
-      interval: "weekly"
+      interval: "monthly"
       day: "monday"
-      time: "09:00"
-    open-pull-requests-limit: 10
-    reviewers:
-      - "@xala-technologies/security-team"
-    assignees:
-      - "@xala-technologies/maintainers"
+      time: "10:00"
+    open-pull-requests-limit: 3
     commit-message:
       prefix: "chore"
       include: "scope"
@@ -46,14 +48,10 @@ updates:
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
-      interval: "weekly"
+      interval: "monthly"
       day: "monday"
-      time: "09:00"
-    open-pull-requests-limit: 5
-    reviewers:
-      - "@xala-technologies/devops-team"
-    assignees:
-      - "@xala-technologies/maintainers"
+      time: "11:00"
+    open-pull-requests-limit: 2
     commit-message:
       prefix: "ci"
       include: "scope"

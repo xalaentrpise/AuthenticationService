@@ -3,10 +3,21 @@ name: Performance Monitoring
 on:
   push:
     branches: [main]
+    paths:
+      - 'packages/authentication/**'
+      - '.github/workflows/performance-monitoring.yml'
   pull_request:
     branches: [main]
+    paths:
+      - 'packages/authentication/**'
+      - '.github/workflows/performance-monitoring.yml'
   schedule:
     - cron: '0 4 * * *' # Daily at 4 AM UTC
+  workflow_dispatch:
+
+concurrency:
+  group: performance-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   performance-baseline:

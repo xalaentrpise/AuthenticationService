@@ -3,10 +3,21 @@ name: Compliance Check
 on:
   push:
     branches: [main, develop]
+    paths:
+      - 'packages/authentication/**'
+      - '.github/workflows/compliance-check.yml'
   pull_request:
     branches: [main]
+    paths:
+      - 'packages/authentication/**'
+      - '.github/workflows/compliance-check.yml'
   schedule:
     - cron: '0 6 * * 1' # Weekly on Monday at 6 AM UTC
+  workflow_dispatch:
+
+concurrency:
+  group: compliance-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   gdpr-compliance:

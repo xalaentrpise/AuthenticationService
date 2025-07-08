@@ -3,10 +3,22 @@ name: CI/CD Pipeline
 on:
   push:
     branches: [main, develop]
+    paths:
+      - 'packages/authentication/**'
+      - '.github/workflows/**'
+      - 'package*.json'
   pull_request:
     branches: [main, develop]
+    paths:
+      - 'packages/authentication/**'
+      - '.github/workflows/**'
+      - 'package*.json'
   release:
     types: [published]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 env:
   NODE_VERSION: '18'
