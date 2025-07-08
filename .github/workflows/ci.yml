@@ -266,7 +266,7 @@ jobs:
           DATABASE_URL: postgresql://postgres:postgres@localhost:5432/test_db
           
       - name: Upload E2E test results
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: always()
         with:
           name: playwright-report
@@ -304,7 +304,7 @@ jobs:
         working-directory: ${{ env.PACKAGE_PATH }}
         
       - name: Upload build artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: package-build
           path: |

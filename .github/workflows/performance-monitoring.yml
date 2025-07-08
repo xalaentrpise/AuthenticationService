@@ -48,7 +48,7 @@ jobs:
         working-directory: ./packages/authentication
         
       - name: Upload performance results
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: performance-results
           path: ./packages/authentication/performance-results/
@@ -141,7 +141,7 @@ jobs:
         working-directory: ./packages/authentication
         
       - name: Upload load test results
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: load-test-results
           path: ./packages/authentication/load-test-results.json
