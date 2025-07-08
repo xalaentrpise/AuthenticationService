@@ -14,10 +14,22 @@
     "test": "jest",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
+    "test:integration": "jest --testPathPattern=integration",
+    "test:e2e": "playwright test",
+    "test:performance": "jest --testPathPattern=performance",
+    "test:load": "node scripts/load-test.js",
+    "test:stress": "node scripts/stress-test.js",
+    "test:all": "npm run test && npm run test:integration && npm run test:e2e && npm run test:performance",
+    "benchmark": "node scripts/benchmark.js",
     "lint": "eslint src --ext .ts",
     "lint:fix": "eslint src --ext .ts --fix",
     "type-check": "tsc --noEmit",
-    "prepublishOnly": "npm run build && npm test"
+    "security-audit": "npm audit --audit-level=moderate",
+    "release-notes": "node scripts/generate-release-notes.js",
+    "version-check": "node scripts/version-check.js",
+    "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s",
+    "prepublishOnly": "npm run build && npm test && npm run security-audit",
+    "release": "npm run build && npm run test:all && npm run security-audit && npm publish"
   },
   "keywords": [
     "authentication",

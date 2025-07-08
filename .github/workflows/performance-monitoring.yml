@@ -1,0 +1,188 @@
+name: Performance Monitoring
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  schedule:
+    - cron: '0 4 * * *' # Daily at 4 AM UTC
+
+jobs:
+  performance-baseline:
+    name: Performance Baseline
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+          
+      - name: Install dependencies
+        run: npm ci
+        
+      - name: Install package dependencies
+        run: npm ci
+        working-directory: ./packages/authentication
+        
+      - name: Run performance benchmarks
+        run: |
+          npm run test:performance
+          npm run benchmark
+        working-directory: ./packages/authentication
+        
+      - name: Bundle size analysis
+        run: |
+          npm run build
+          npx bundlesize --config .bundlesize.json
+        working-directory: ./packages/authentication
+        
+      - name: Memory usage analysis
+        run: |
+          node --max-old-space-size=1024 ./scripts/memory-analysis.js
+        working-directory: ./packages/authentication
+        
+      - name: Upload performance results
+        uses: actions/upload-artifact@v3
+        with:
+          name: performance-results
+          path: ./packages/authentication/performance-results/
+          
+      - name: Comment PR with performance results
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const fs = require('fs');
+            const path = './packages/authentication/performance-results/summary.json';
+            if (fs.existsSync(path)) {
+              const results = JSON.parse(fs.readFileSync(path, 'utf8'));
+              const comment = `## Performance Results
+              
+              **Bundle Size**: ${results.bundleSize}
+              **Memory Usage**: ${results.memoryUsage}
+              **Authentication Speed**: ${results.authSpeed}ms
+              **Token Generation**: ${results.tokenGeneration}ms
+              
+              ${results.bundleSize > 500000 ? '⚠️ Bundle size exceeds 500KB threshold' : '✅ Bundle size within limits'}
+              ${results.memoryUsage > 100 ? '⚠️ Memory usage exceeds 100MB threshold' : '✅ Memory usage within limits'}
+              `;
+              
+              github.rest.issues.createComment({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: comment
+              });
+            }
+
+  load-testing:
+    name: Load Testing
+    runs-on: ubuntu-latest
+    
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: test_db
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+          
+      - name: Install dependencies
+        run: npm ci
+        
+      - name: Install package dependencies
+        run: npm ci
+        working-directory: ./packages/authentication
+        
+      - name: Install k6
+        run: |
+          sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys C5AD17C747E3415A3642D57D77C6C491D6AC1D69
+          echo "deb https://dl.k6.io/deb stable main" | sudo tee /etc/apt/sources.list.d/k6.list
+          sudo apt-get update
+          sudo apt-get install k6
+          
+      - name: Start test server
+        run: |
+          npm run dev &
+          sleep 30
+        env:
+          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/test_db
+          
+      - name: Run load tests
+        run: |
+          k6 run --out json=load-test-results.json ./scripts/load-test.js
+        working-directory: ./packages/authentication
+        
+      - name: Analyze load test results
+        run: |
+          node ./scripts/analyze-load-results.js
+        working-directory: ./packages/authentication
+        
+      - name: Upload load test results
+        uses: actions/upload-artifact@v3
+        with:
+          name: load-test-results
+          path: ./packages/authentication/load-test-results.json
+
+  stress-testing:
+    name: Stress Testing
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+          
+      - name: Install dependencies
+        run: npm ci
+        
+      - name: Install package dependencies
+        run: npm ci
+        working-directory: ./packages/authentication
+        
+      - name: Run stress tests
+        run: |
+          npm run test:stress
+        working-directory: ./packages/authentication
+        
+      - name: Memory leak detection
+        run: |
+          node --expose-gc ./scripts/memory-leak-test.js
+        working-directory: ./packages/authentication
+        
+      - name: CPU usage monitoring
+        run: |
+          node ./scripts/cpu-monitoring.js
+        working-directory: ./packages/authentication
+        
+      - name: Check for resource exhaustion
+        run: |
+          node ./scripts/resource-exhaustion-test.js
+        working-directory: ./packages/authentication

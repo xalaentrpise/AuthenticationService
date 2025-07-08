@@ -1,0 +1,67 @@
+name: Security Scan
+
+on:
+  schedule:
+    - cron: '0 2 * * *' # Daily at 2 AM UTC
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+jobs:
+  security-scan:
+    name: Daily Security Scan
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+          
+      - name: Install dependencies
+        run: npm ci
+        
+      - name: Install package dependencies
+        run: npm ci
+        working-directory: ./packages/authentication
+        
+      - name: Run npm audit
+        run: npm audit --audit-level=moderate
+        working-directory: ./packages/authentication
+        
+      - name: Run Snyk security scan
+        uses: snyk/actions/node@master
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        with:
+          args: --severity-threshold=medium --file=./packages/authentication/package.json
+          
+      - name: Run Semgrep security scan
+        uses: returntocorp/semgrep-action@v1
+        with:
+          config: >-
+            p/security-audit
+            p/secrets
+            p/owasp-top-ten
+            p/nodejs
+            
+      - name: Upload security scan results
+        uses: github/codeql-action/upload-sarif@v2
+        if: always()
+        with:
+          sarif_file: semgrep.sarif
+          
+      - name: Check for dependency vulnerabilities
+        run: |
+          npx better-npm-audit audit --level moderate
+        working-directory: ./packages/authentication
+        
+      - name: Notify security team
+        if: failure()
+        run: |
+          echo "Security vulnerabilities found. Please review the scan results."
+          # Add notification logic here

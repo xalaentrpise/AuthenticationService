@@ -1,0 +1,161 @@
+name: Compliance Check
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+  schedule:
+    - cron: '0 6 * * 1' # Weekly on Monday at 6 AM UTC
+
+jobs:
+  gdpr-compliance:
+    name: GDPR Compliance Check
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+          
+      - name: Install dependencies
+        run: npm ci
+        
+      - name: Install package dependencies
+        run: npm ci
+        working-directory: ./packages/authentication
+        
+      - name: Check data protection patterns
+        run: |
+          echo "Checking GDPR data protection patterns..."
+          if ! grep -r "data.*protection\|privacy\|consent\|gdpr" ./packages/authentication/src --include="*.ts"; then
+            echo "GDPR data protection patterns missing"
+            exit 1
+          fi
+          
+      - name: Check personal data handling
+        run: |
+          echo "Checking personal data handling..."
+          if ! grep -r "personal.*data\|pii\|sensitive.*data" ./packages/authentication/src --include="*.ts"; then
+            echo "Personal data handling patterns missing"
+            exit 1
+          fi
+          
+      - name: Check data retention policies
+        run: |
+          echo "Checking data retention policies..."
+          if ! grep -r "retention\|delete\|expire" ./packages/authentication/src --include="*.ts"; then
+            echo "Data retention policies missing"
+            exit 1
+          fi
+          
+      - name: Check encryption implementation
+        run: |
+          echo "Checking encryption implementation..."
+          if ! grep -r "encrypt\|decrypt\|cipher" ./packages/authentication/src --include="*.ts"; then
+            echo "Encryption implementation missing"
+            exit 1
+          fi
+
+  norwegian-compliance:
+    name: Norwegian Compliance Check
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+          
+      - name: Install dependencies
+        run: npm ci
+        
+      - name: Install package dependencies
+        run: npm ci
+        working-directory: ./packages/authentication
+        
+      - name: Check NSM compliance
+        run: |
+          echo "Checking NSM compliance..."
+          if ! grep -r "nsm\|NSM\|norwegian.*security" ./packages/authentication/src --include="*.ts"; then
+            echo "NSM compliance patterns missing"
+            exit 1
+          fi
+          
+      - name: Check Digdir standards
+        run: |
+          echo "Checking Digdir standards..."
+          if ! grep -r "digdir\|Digdir\|digitalization" ./packages/authentication/src --include="*.ts"; then
+            echo "Digdir standards missing"
+            exit 1
+          fi
+          
+      - name: Check ID-porten integration
+        run: |
+          echo "Checking ID-porten integration..."
+          if ! grep -r "idporten\|ID-porten\|IDPorten" ./packages/authentication/src --include="*.ts"; then
+            echo "ID-porten integration missing"
+            exit 1
+          fi
+          
+      - name: Check BankID integration
+        run: |
+          echo "Checking BankID integration..."
+          if ! grep -r "bankid\|BankID\|banking.*id" ./packages/authentication/src --include="*.ts"; then
+            echo "BankID integration missing"
+            exit 1
+          fi
+
+  audit-logging:
+    name: Audit Logging Compliance
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+          
+      - name: Install dependencies
+        run: npm ci
+        
+      - name: Install package dependencies
+        run: npm ci
+        working-directory: ./packages/authentication
+        
+      - name: Check audit trail implementation
+        run: |
+          echo "Checking audit trail implementation..."
+          if ! grep -r "audit.*trail\|audit.*log\|compliance.*log" ./packages/authentication/src --include="*.ts"; then
+            echo "Audit trail implementation missing"
+            exit 1
+          fi
+          
+      - name: Check log integrity
+        run: |
+          echo "Checking log integrity..."
+          if ! grep -r "log.*integrity\|tamper.*proof\|immutable.*log" ./packages/authentication/src --include="*.ts"; then
+            echo "Log integrity measures missing"
+            exit 1
+          fi
+          
+      - name: Check timestamp accuracy
+        run: |
+          echo "Checking timestamp accuracy..."
+          if ! grep -r "timestamp\|time.*stamp\|Date\\.now" ./packages/authentication/src --include="*.ts"; then
+            echo "Timestamp implementation missing"
+            exit 1
+          fi

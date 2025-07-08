@@ -1,0 +1,56 @@
+name: Dependabot Auto-merge
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  dependabot-auto-merge:
+    name: Dependabot Auto-merge
+    runs-on: ubuntu-latest
+    if: github.actor == 'dependabot[bot]'
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+          
+      - name: Install dependencies
+        run: npm ci
+        
+      - name: Install package dependencies
+        run: npm ci
+        working-directory: ./packages/authentication
+        
+      - name: Run security audit
+        run: npm audit --audit-level=moderate
+        working-directory: ./packages/authentication
+        
+      - name: Run tests
+        run: npm test
+        working-directory: ./packages/authentication
+        
+      - name: Check for breaking changes
+        run: |
+          # Check if this is a major version update
+          if [[ "${{ github.event.pull_request.title }}" =~ "bump.*from.*to.*[0-9]+\.[0-9]+\.[0-9]+" ]]; then
+            VERSION_FROM=$(echo "${{ github.event.pull_request.title }}" | sed -n 's/.*from \([0-9]\+\)\.[0-9]\+\.[0-9]\+.*/\1/p')
+            VERSION_TO=$(echo "${{ github.event.pull_request.title }}" | sed -n 's/.*to \([0-9]\+\)\.[0-9]\+\.[0-9]\+.*/\1/p')
+            if [ "$VERSION_FROM" != "$VERSION_TO" ]; then
+              echo "Major version update detected - manual review required"
+              exit 1
+            fi
+          fi
+          
+      - name: Auto-approve and merge
+        if: success()
+        run: |
+          gh pr review --approve "${{ github.event.pull_request.number }}"
+          gh pr merge --auto --squash "${{ github.event.pull_request.number }}"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

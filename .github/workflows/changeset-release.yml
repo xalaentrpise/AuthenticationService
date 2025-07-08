@@ -1,0 +1,154 @@
+name: Changeset Release
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency: ${{ github.workflow }}-${{ github.ref }}
+
+jobs:
+  release:
+    name: Release
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+      issues: write
+      
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+          
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+          registry-url: 'https://registry.npmjs.org'
+          
+      - name: Install dependencies
+        run: npm ci
+        
+      - name: Install package dependencies
+        run: npm ci
+        working-directory: ./packages/authentication
+        
+      - name: Install changesets
+        run: npm install @changesets/cli @changesets/changelog-github
+        
+      - name: Create Release Pull Request or Publish to npm
+        id: changesets
+        uses: changesets/action@v1
+        with:
+          publish: npm run release
+          commit: "chore: release package"
+          title: "chore: release package"
+          setupGitUser: true
+          createGithubReleases: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          
+      - name: Generate detailed changelog
+        if: steps.changesets.outputs.published == 'true'
+        run: |
+          cd packages/authentication
+          npx conventional-changelog-cli -p angular -i CHANGELOG.md -s -r 0
+          
+      - name: Update package documentation
+        if: steps.changesets.outputs.published == 'true'
+        run: |
+          cd packages/authentication
+          npm run docs:generate || echo "Documentation generation not available"
+          
+      - name: Create GitHub Release with detailed notes
+        if: steps.changesets.outputs.published == 'true'
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ steps.changesets.outputs.publishedPackages[0].version }}
+          name: Release ${{ steps.changesets.outputs.publishedPackages[0].version }}
+          body: |
+            ## 🚀 What's New
+            
+            ${{ steps.changesets.outputs.publishedPackages[0].changelog }}
+            
+            ## 📦 Package Information
+            
+            - **Package**: @xala-technologies/authentication
+            - **Version**: ${{ steps.changesets.outputs.publishedPackages[0].version }}
+            - **Published**: ${{ github.event.head_commit.timestamp }}
+            
+            ## 🔧 Installation
+            
+            ```bash
+            npm install @xala-technologies/authentication@${{ steps.changesets.outputs.publishedPackages[0].version }}
+            ```
+            
+            ## 📋 Norwegian Compliance Features
+            
+            - ✅ ID-porten integration
+            - ✅ BankID mobile support  
+            - ✅ Feide educational authentication
+            - ✅ Vipps mobile payment auth
+            - ✅ GDPR compliance logging
+            - ✅ NSM security standards
+            
+            ## 🌍 Global Authentication Providers
+            
+            - ✅ Google OAuth 2.0
+            - ✅ Facebook social login
+            - ✅ Supabase integration
+            - ✅ Email/password authentication
+            - ✅ Magic link passwordless
+            - ✅ SMS OTP verification
+            
+            ## 🛡️ Security & Compliance
+            
+            - ✅ Enterprise-grade RBAC
+            - ✅ JWT token management
+            - ✅ Audit trail logging
+            - ✅ Data encryption at rest
+            - ✅ GDPR data protection
+            
+            ## 📚 Documentation
+            
+            - [Installation Guide](https://github.com/xala-technologies/authentication/blob/main/packages/authentication/README.md#installation)
+            - [API Reference](https://github.com/xala-technologies/authentication/blob/main/packages/authentication/README.md#api-reference)
+            - [Configuration Examples](https://github.com/xala-technologies/authentication/blob/main/packages/authentication/README.md#configuration)
+            
+            ## 🐛 Bug Reports & Feature Requests
+            
+            Please report issues on our [GitHub Issues](https://github.com/xala-technologies/authentication/issues) page.
+            
+            ---
+            
+            **Full Changelog**: https://github.com/xala-technologies/authentication/blob/main/packages/authentication/CHANGELOG.md
+          files: |
+            packages/authentication/dist/**
+            packages/authentication/package.json
+            packages/authentication/README.md
+            packages/authentication/LICENSE
+          draft: false
+          prerelease: false
+          
+      - name: Notify team of release
+        if: steps.changesets.outputs.published == 'true'
+        run: |
+          echo "✅ Package published successfully!"
+          echo "Version: ${{ steps.changesets.outputs.publishedPackages[0].version }}"
+          echo "Changelog: ${{ steps.changesets.outputs.publishedPackages[0].changelog }}"
+          
+      - name: Update project documentation
+        if: steps.changesets.outputs.published == 'true'
+        run: |
+          # Update replit.md with release information
+          echo "## Latest Release" >> replit.md
+          echo "" >> replit.md
+          echo "- **Version**: ${{ steps.changesets.outputs.publishedPackages[0].version }}" >> replit.md
+          echo "- **Released**: $(date -u +%Y-%m-%d)" >> replit.md
+          echo "- **NPM**: https://www.npmjs.com/package/@xala-technologies/authentication" >> replit.md
+          echo "" >> replit.md

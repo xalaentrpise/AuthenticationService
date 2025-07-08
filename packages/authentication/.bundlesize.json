@@ -1,0 +1,28 @@
+{
+  "files": [
+    {
+      "path": "dist/index.js",
+      "maxSize": "500kb",
+      "compression": "gzip"
+    },
+    {
+      "path": "dist/providers/*.js",
+      "maxSize": "50kb",
+      "compression": "gzip"
+    },
+    {
+      "path": "dist/core/*.js",
+      "maxSize": "100kb",
+      "compression": "gzip"
+    },
+    {
+      "path": "dist/middleware/*.js",
+      "maxSize": "30kb",
+      "compression": "gzip"
+    }
+  ],
+  "ci": {
+    "trackBranches": ["main", "develop"],
+    "repoBranch": "main"
+  }
+}
