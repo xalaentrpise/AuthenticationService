@@ -1,0 +1,138 @@
+## ✅ @xala-technologies/authentication — Project Checklist
+
+This checklist will guide the AI Coding Agent in implementing the **authentication package**, which supports Norwegian-compliant authentication and authorization. The agent must follow **SOLID principles**, include **100% test coverage**, and prepare for **Supabase (XalaBase)** integration.
+
+---
+
+### 📦 Setup & Scaffolding
+
+* [ ] Create `packages/authentication` folder inside the monorepo
+* [ ] Initialize `package.json` with name `@xala-technologies/authentication`
+* [ ] Add TypeScript, ESLint, Prettier configs
+* [ ] Setup `tsconfig.json` with `@xala-technologies/types` support
+* [ ] Create `src/` folder structure
+
+  * [ ] `src/core/`
+  * [ ] `src/providers/`
+  * [ ] `src/middleware/`
+  * [ ] `src/permissions/`
+  * [ ] `src/compliance/`
+  * [ ] `__tests__/`
+  * [ ] `README.md`
+
+---
+
+### 🔐 1. Core Authentication Modules
+
+#### Auth Core
+
+* [ ] Define `IAuthService` interface
+* [ ] Implement `AuthService` with login, logout, session management
+* [ ] Add JWT generation + refresh token support
+* [ ] Add session expiration config (per user type)
+* [ ] Integrate with Supabase session context
+
+#### Auth Tokens
+
+* [ ] Implement access token service
+* [ ] Implement refresh token strategy
+* [ ] Add token signing with private/public keys
+* [ ] Add support for `x-user-role`, `x-org-id`, `x-scope` headers
+
+---
+
+### 🌐 2. Authentication Providers
+
+* [ ] Create `src/providers/` folder
+* [ ] Add `SupabaseAuthProvider` wrapper
+* [ ] Implement `ID-portenAuthProvider`
+* [ ] Implement `BankIDAuthProvider`
+* [ ] Implement `FeideAuthProvider`
+* [ ] Implement `MinIDAuthProvider`
+* [ ] Implement fallback `DevAuthProvider` for local dev
+* [ ] Include OIDC metadata import and JWKS support
+
+---
+
+### 🧱 3. Middleware & Permissions
+
+#### Middleware
+
+* [ ] Create `withAuthContext()` middleware
+* [ ] Validate JWT from request header or cookie
+* [ ] Extract user, roles, tenant, and permissions
+* [ ] Inject context into `req.context`
+
+#### Permissions
+
+* [ ] Implement RBAC system with role hierarchy
+* [ ] Add `checkPermission(user, action, resource)` utility
+* [ ] Integrate with organization/tenant context
+* [ ] Include fine-grained municipal hierarchy support
+
+---
+
+### 📜 4. Compliance
+
+* [ ] Log auth events in compliance-safe format
+* [ ] Encrypt logs using NSM-compliant cipher (ChaCha20-Poly1305)
+* [ ] Add GDPR consent capture and storage utility
+* [ ] Store timestamps and origin of consent
+* [ ] Create `audit.json` schema for external audit logs
+
+---
+
+### 🧪 5. Testing
+
+* [ ] Setup Jest config for `@xala-technologies/authentication`
+* [ ] Add mock Supabase context
+* [ ] Add mock BankID / Feide / ID-porten services
+* [ ] Create 100% unit test coverage for all modules
+* [ ] Add integration tests for:
+
+  * [ ] Auth flow (login, logout, refresh)
+  * [ ] Session persistence
+  * [ ] Permissions middleware
+  * [ ] External provider callbacks
+
+---
+
+### 🔧 6. Developer Experience
+
+* [ ] Setup `validate:auth` script to ensure:
+
+  * [ ] No hardcoded secrets
+  * [ ] JWT config is valid
+  * [ ] Role definitions exist for all use cases
+* [ ] Setup `dev:start` script with mock providers
+* [ ] Setup lint + typecheck scripts
+* [ ] Add documentation for:
+
+  * [ ] Setup
+  * [ ] Integration with Supabase
+  * [ ] Provider config
+  * [ ] Middleware injection
+
+---
+
+### 🔗 7. Integration with XalaBase (Supabase Fork)
+
+* [ ] Add hook to register new providers in Supabase Auth UI
+* [ ] Patch Supabase studio to show ID-porten, Feide, BankID
+* [ ] Ensure JWT config matches Supabase expectations
+* [ ] Allow use of this module as a plug-and-play package in XalaBase
+
+---
+
+### 📁 Deliverables
+
+* [ ] `@xala-technologies/authentication` package fully scaffolded
+* [ ] 100% test coverage
+* [ ] All Norwegian providers mocked and tested
+* [ ] README with setup + integration docs
+* [ ] Integration-ready for Supabase/XalaBase
+* [ ] Mock output available for AI Builder
+
+---
+
+Let me know when to continue with `@xala-technologies/security-compliance` ✅

@@ -1,0 +1,193 @@
+# 🧠 AI Builder Prompt: Create 12 Norwegian-Compliant SaaS Packages for Xala Enterprise
+
+> Use this comprehensive prompt inside Cursor, Lovable.dev, or any competent AI Coding Agent. It must generate one package at a time using a consistent architecture, fully TypeScript-based, and include testing, documentation, compliance, and integration support. Each package should be placed under `packages/` in the monorepo.
+
+---
+
+## 📦 General Prompt (One Package at a Time)
+
+```markdown
+You are a senior enterprise AI engineer tasked with creating a reusable monorepo package inside the Xala Enterprise Platform.
+
+✅ Each package must:
+- Be written in clean, typed TypeScript.
+- Be published as an NPM module with proper `package.json`, `README.md`, and `CHANGELOG.md`.
+- Include `src/`, `tests/`, and `docs/` directories.
+- Support Jest for unit tests.
+- Integrate seamlessly into XalaBase or Supabase-based architecture.
+- Be Norwegian-compliant (GDPR, NSM, Digdir).
+- Follow event-driven and modular architecture principles.
+- Expose all types via `@xala-technologies/types`.
+
+Please generate the initial version of the following package:
+
+### Package: @xala-technologies/{PACKAGE_NAME}
+
+- **Purpose**: {INSERT PURPOSE HERE}
+- **Key Modules**: {LIST MODULES LIKE auth-core, permissions-helper, etc.}
+- **Integration Targets**: Supabase, Next.js, XalaBase
+- **Validation Requirements**:
+  - GDPR-compliant logging (if applicable)
+  - Norwegian audit support (if applicable)
+  - i18n support for Bokmål/Nynorsk (if UI component)
+
+> Start with folder structure, boilerplate code, and placeholder for mock functions with TODOs for actual logic.
+```
+
+---
+
+## 📁 Folder Structure Template (Each Package)
+
+```bash
+packages/{package-name}/
+├── src/
+│   ├── index.ts
+│   ├── core/
+│   │   └── {modules}.ts
+│   ├── utils/
+│   │   └── helpers.ts
+│   └── types/
+│       └── index.ts
+├── __tests__/
+│   ├── unit/
+│   └── integration/
+├── docs/
+│   └── overview.md
+├── package.json
+├── tsconfig.json
+├── README.md
+└── CHANGELOG.md
+```
+
+---
+
+## 🧰 Package List (Sequential AI Instructions)
+
+Repeat the above process and scaffold each of these packages **in sequence**:
+
+### 🔐 Security & Compliance
+
+1. `@xala-technologies/authentication`
+
+   * Central auth management with BankID, ID-porten, Feide
+   * Modules:
+
+     * `auth-core`: Token handling, password, and OIDC flows
+     * `auth-middleware`: Express/Fastify middleware for authZ
+     * `auth-ui`: Pre-built login components
+     * `auth-provider`: Integrations with ID-porten, BankID, Feide
+
+2. `@xala-technologies/security-compliance`
+
+   * NSM/ISO enforcement, RBAC, encrypted logs
+   * Modules:
+
+     * `rbac-core`: Role-based permission model
+     * `audit-trail`: Immutable logging with tamper-proof storage
+     * `compliance-validator`: Validates GDPR/NSM constraints
+
+3. `@xala-technologies/norwegian-services`
+
+   * Digdir, Altinn, Folkeregisteret, Kartverket
+   * Modules:
+
+     * `idporten-api`: Handles login + claims from ID-porten
+     * `altinn-messaging`: SOAP/REST interface for Altinn
+     * `digipost-core`: Secure digital document delivery
+
+### 📊 Core Infra & Platform
+
+4. `@xala-technologies/foundation`
+
+   * Core SDKs, error handling, i18n, logger
+   * Modules:
+
+     * `logger`: Central logger using winston/pino
+     * `i18n-core`: Language packs and formatting helpers
+     * `event-pubsub`: Internal event bus
+     * `saga-orchestrator`: Async business logic flow engine
+
+5. `@xala-technologies/platform-services`
+
+   * API Gateway, Caching, Config
+   * Modules:
+
+     * `api-router`: OpenAPI-based router engine
+     * `config-manager`: Central config fetcher with overrides
+     * `redis-cache`: Redis wrapper with TTLs and regioning
+
+6. `@xala-technologies/monitoring-services`
+
+   * Metrics, Logging, Alerting, Heartbeats
+   * Modules:
+
+     * `prometheus-adapter`: Metric collection for Prometheus/Grafana
+     * `log-pusher`: Structured logs to Elastic or Logstash
+     * `health-monitor`: Liveness and readiness probes
+
+### 🗃️ Data & Documents
+
+7. `@xala-technologies/data-services`
+
+   * Database, Analytics, Migration, Backup
+   * Modules:
+
+     * `pg-client`: Postgres adapter with multitenancy support
+     * `analytics-core`: Norwegian analytics/BI-friendly event logger
+     * `migration-helper`: Safe schema migration with downtime warning
+
+8. `@xala-technologies/document-services`
+
+   * File mgmt, signature, templates, archive
+   * Modules:
+
+     * `doc-converter`: PDF/Word to HTML and vice versa
+     * `signature-idporten`: Digital signing via ID-porten
+     * `retention-policy`: NSM/Bokmål metadata & document expiry
+
+### 💼 Business Logic
+
+9. `@xala-technologies/business-services`
+
+   * Audit, Notifications, Tenants, Workflows
+   * Modules:
+
+     * `workflow-engine`: BPMN-style workflow runtime
+     * `notifier`: SMS, email, in-app Norwegian-based notifs
+     * `tenant-registry`: Manages tenant entities, roles, billing
+     * `permission-core`: Grants based on user/actor/org/role
+
+10. `@xala-technologies/ui-system`
+
+    * React + Tailwind + shadcn, WCAG AA
+    * Modules:
+
+      * `bokmal-datepicker`: Norwegian calendar picker
+      * `semantic-grid`: Responsive layout engine for mobile/desktop
+      * `form-builder`: Drag-drop JSON-based form generator
+
+### 🧪 Testing & Automation
+
+11. `@xala-technologies/test-infrastructure`
+
+    * Jest, factories, compliance test runners
+    * Modules:
+
+      * `data-factory`: Create mock datasets using Norwegian schema
+      * `faker-norway`: Custom `faker.js` extension for realistic data
+      * `a11y-tester`: Automates Lighthouse + WCAG testing
+
+12. `@xala-technologies/api-scaffolding`
+
+    * AI/CLI-based code generation of CRUD APIs
+    * Modules:
+
+      * `crud-gen`: Generates Prisma + API routes + tests
+      * `template-compiler`: Converts prompt → code + docs
+      * `solid-validator`: Zod/OpenAPI contract validation
+
+---
+
+Once packages are scaffolded, inject them into the XalaBase core as extensions, and document their usage in a centralized Developer Portal.
+
+Let me know when you're ready to start generating one or all in code!
