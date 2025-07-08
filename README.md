@@ -7,7 +7,7 @@
 [![GDPR Compliant](https://img.shields.io/badge/GDPR-Compliant-green.svg)](https://gdpr.eu/)
 [![Test Coverage](https://img.shields.io/badge/Coverage-100%25-brightgreen.svg)](#testing)
 
-## 🌟 Features
+## Features
 
 - **10+ Authentication Providers** - Norwegian compliance, global OAuth, and passwordless options
 - **Norwegian Compliance** - ID-porten, BankID, Feide, Vipps integration with GDPR/NSM compliance
@@ -18,7 +18,7 @@
 - **TypeScript Native** - Full type safety and IntelliSense support
 - **Framework Integration** - Express, Fastify, Supabase Edge Functions
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Installation
 
@@ -57,7 +57,7 @@ const loginUrl = await authService.getLoginUrl('idporten');
 const tokens = await authService.handleCallback('idporten', authCode);
 ```
 
-## 🔐 Authentication Providers
+## Authentication Providers
 
 ### Norwegian Compliance Providers
 
@@ -250,7 +250,7 @@ await email.requestPasswordReset({
 });
 ```
 
-## 🛡️ Role-Based Access Control (RBAC)
+## Role-Based Access Control (RBAC)
 
 Configure hierarchical roles and permissions:
 
@@ -278,7 +278,7 @@ const authService = new AuthService({
 });
 ```
 
-## 🔧 Middleware Integration
+## Middleware Integration
 
 ### Express.js
 
@@ -325,7 +325,7 @@ server.get('/protected', {
 });
 ```
 
-## 📊 Audit Logging & Compliance
+## Audit Logging & Compliance
 
 Built-in GDPR-compliant audit logging:
 
@@ -348,7 +348,7 @@ const logger = new ComplianceLogger({
 const user = await authService.authenticate(provider, credentials);
 ```
 
-## 🧪 Testing
+## Testing
 
 The package includes comprehensive test coverage for all providers:
 
@@ -365,19 +365,19 @@ npm test -- --coverage
 
 ### Test Coverage by Provider
 
-- ✅ **IDPortenProvider** - 100% coverage
-- ✅ **BankIDProvider** - 100% coverage  
-- ✅ **FeideProvider** - 100% coverage
-- ✅ **VippsAuthProvider** - 100% coverage
-- ✅ **GoogleOAuthProvider** - 100% coverage
-- ✅ **FacebookOAuthProvider** - 100% coverage
-- ✅ **EmailAuthProvider** - 100% coverage
-- ✅ **MagicLinkAuthProvider** - 100% coverage
-- ✅ **SMSOTPAuthProvider** - 100% coverage
-- ✅ **SupabaseAuthProvider** - 100% coverage
-- ✅ **DevAuthProvider** - 100% coverage
+- **IDPortenProvider** - 100% coverage
+- **BankIDProvider** - 100% coverage  
+- **FeideProvider** - 100% coverage
+- **VippsAuthProvider** - 100% coverage
+- **GoogleOAuthProvider** - 100% coverage
+- **FacebookOAuthProvider** - 100% coverage
+- **EmailAuthProvider** - 100% coverage
+- **MagicLinkAuthProvider** - 100% coverage
+- **SMSOTPAuthProvider** - 100% coverage
+- **SupabaseAuthProvider** - 100% coverage
+- **DevAuthProvider** - 100% coverage
 
-## 🌍 Environment Configuration
+## Environment Configuration
 
 ### Development Environment
 
@@ -413,7 +413,7 @@ DATABASE_URL=postgresql://user:password@localhost:5432/auth_db
 
 Ensure all environment variables are properly configured in your production environment with production-grade secrets and URLs.
 
-## 📚 API Reference
+## API Reference
 
 ### AuthService
 
@@ -475,7 +475,7 @@ interface AuthTokens {
 }
 ```
 
-## 🔒 Security Considerations
+## Security Considerations
 
 ### JWT Token Security
 - Use strong, randomly generated secrets (min 256 bits)
@@ -493,7 +493,7 @@ interface AuthTokens {
 - Sensitive data is encrypted using ChaCha20-Poly1305
 - Configurable data retention policies for GDPR compliance
 
-## 🤝 Contributing
+## Contributing
 
 We welcome contributions! Please see our [Contributing Guidelines](CONTRIBUTING.md) for details.
 
@@ -514,27 +514,27 @@ npm test
 npm run dev
 ```
 
-## 📄 License
+## License
 
 MIT License - see [LICENSE](LICENSE) file for details.
 
-## 📞 Support
+## Support
 
 - **Documentation**: [Full documentation](https://docs.xala.no/authentication)
 - **Issues**: [GitHub Issues](https://github.com/xala-technologies/authentication/issues)
 - **Email**: support@xala.no
 - **Norwegian Support**: Available in Norwegian for compliance questions
 
-## 🏆 Compliance & Certifications
+## Compliance & Certifications
 
-- ✅ **GDPR Compliant** - Built-in data protection and privacy controls
-- ✅ **NSM Guidelines** - Following Norwegian security guidelines
-- ✅ **Digdir Standards** - Compliant with Norwegian digitalization standards
-- ✅ **SOC 2 Type II** - Security and availability controls
-- ✅ **ISO 27001** - Information security management
+- **GDPR Compliant** - Built-in data protection and privacy controls
+- **NSM Guidelines** - Following Norwegian security guidelines
+- **Digdir Standards** - Compliant with Norwegian digitalization standards
+- **SOC 2 Type II** - Security and availability controls
+- **ISO 27001** - Information security management
 
 ---
 
-**Made with ❤️ in Norway for the global community**
+**Xala Technologies**
 
-*Xala Technologies - Simplifying enterprise authentication while maintaining the highest security and compliance standards.*
+Simplifying enterprise authentication while maintaining the highest security and compliance standards.

@@ -2,7 +2,7 @@
 
 Thank you for your interest in contributing to the Xala Authentication System! This document provides guidelines and information for contributors.
 
-## 🚀 Getting Started
+## Getting Started
 
 ### Prerequisites
 
@@ -40,7 +40,7 @@ Thank you for your interest in contributing to the Xala Authentication System! T
    npm run dev
    ```
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 packages/authentication/
@@ -60,7 +60,7 @@ client/                   # Demo landing page
 │   └── lib/             # Client utilities
 ```
 
-## 🔧 Development Guidelines
+## Development Guidelines
 
 ### Code Style
 
@@ -132,7 +132,7 @@ describe('ProviderName', () => {
 });
 ```
 
-## 🔐 Adding Authentication Providers
+## Adding Authentication Providers
 
 ### Provider Interface
 
@@ -215,7 +215,7 @@ When adding Norwegian compliance providers:
 - [ ] Token validation tests (if applicable)
 - [ ] Compliance tests (for Norwegian providers)
 
-## 🧪 Testing Guidelines
+## Testing Guidelines
 
 ### Running Tests
 
@@ -258,7 +258,7 @@ afterEach(() => {
 });
 ```
 
-## 📋 Pull Request Process
+## Pull Request Process
 
 1. **Fork the repository**
 2. **Create a feature branch**
@@ -323,7 +323,7 @@ Brief description of changes
 - [ ] Tests added/updated
 ```
 
-## 🔍 Code Review Guidelines
+## Code Review Guidelines
 
 ### For Reviewers
 
@@ -341,7 +341,7 @@ Brief description of changes
 - Update tests if functionality changes
 - Keep PR scope focused and manageable
 
-## 🌐 Internationalization
+## Internationalization
 
 When adding providers or documentation:
 
@@ -350,7 +350,7 @@ When adding providers or documentation:
 - Include proper error messages in relevant languages
 - Consider cultural and regulatory differences
 
-## 📚 Documentation Standards
+## Documentation Standards
 
 - Use clear, concise language
 - Include code examples for all public APIs
@@ -358,7 +358,7 @@ When adding providers or documentation:
 - Provide troubleshooting guidance
 - Keep documentation up to date with code changes
 
-## 🐛 Bug Reports
+## Bug Reports
 
 When reporting bugs:
 
@@ -373,7 +373,7 @@ When reporting bugs:
 4. **Include error messages and logs**
 5. **Suggest potential solutions if known**
 
-## 💡 Feature Requests
+## Feature Requests
 
 When requesting features:
 
@@ -383,24 +383,24 @@ When requesting features:
 4. **Consider impact on existing functionality**
 5. **Discuss compliance implications if relevant**
 
-## 📞 Getting Help
+## Getting Help
 
 - **GitHub Issues**: For bugs and feature requests
 - **Discussions**: For questions and community support
 - **Email**: support@xala.no for urgent issues
 - **Norwegian Support**: Available for compliance questions
 
-## 🏆 Recognition
+## Recognition
 
 Contributors will be recognized in:
 - CONTRIBUTORS.md file
 - Release notes for significant contributions
 - Community highlights
 
-## 📄 License
+## License
 
 By contributing, you agree that your contributions will be licensed under the MIT License.
 
 ---
 
-Thank you for contributing to the Xala Authentication System! Your efforts help make enterprise authentication more secure and accessible for everyone.
+Thank you for contributing to the Xala Authentication System. Your contributions help improve enterprise authentication security and accessibility.
