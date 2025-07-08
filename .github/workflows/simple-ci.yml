@@ -35,4 +35,3 @@ jobs:
       - name: Build package
         run: npm run build
         working-directory: ./packages/authentication
-

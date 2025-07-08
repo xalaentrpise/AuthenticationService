@@ -1,21 +1,14 @@
-name: Dependabot Auto-merge
+name: Dependabot
 
 on:
   pull_request:
-    types: [opened, synchronize, reopened]
-  workflow_run:
-    workflows: ["CI/CD Pipeline"]
-    types: [completed]
-
-concurrency:
-  group: dependabot-${{ github.ref }}
-  cancel-in-progress: true
+    types: [opened]
 
 jobs:
-  dependabot-auto-merge:
-    name: Dependabot Auto-merge
+  dependabot-merge:
+    name: Auto-merge Dependabot PRs
     runs-on: ubuntu-latest
-    if: github.actor == 'dependabot[bot]' && (github.event_name == 'pull_request' || github.event.workflow_run.conclusion == 'success')
+    if: github.actor == 'dependabot[bot]'
     
     steps:
       - name: Checkout code
@@ -54,17 +47,7 @@ jobs:
             fi
           fi
           
-      - name: Auto-approve and merge (patch/minor only)
-        if: success()
-        run: |
-          # Only auto-merge patch and minor updates, not major
-          PR_TITLE="${{ github.event.pull_request.title }}"
-          if [[ "$PR_TITLE" == *"chore(deps):"* ]] && [[ "$PR_TITLE" != *"major"* ]]; then
-            echo "Auto-approving and merging non-major dependency update"
-            gh pr review --approve "${{ github.event.pull_request.number }}"
-            gh pr merge --auto --squash "${{ github.event.pull_request.number }}"
-          else
-            echo "Skipping auto-merge for potential major update or non-dependency PR"
-          fi
+      - name: Enable auto-merge
+        run: gh pr merge --auto --squash "${{ github.event.pull_request.number }}"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
